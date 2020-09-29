@@ -1,9 +1,12 @@
 package com.davevarga.tmdbmovieswithpaging.ui
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,20 +18,28 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.davevarga.tmdbmovieswithpaging.R
 import com.davevarga.tmdbmovieswithpaging.R.id.action_listFragment_to_filterFragment
 import com.davevarga.tmdbmovieswithpaging.models.Movie
+import com.davevarga.tmdbmovieswithpaging.network.GetData
+import com.davevarga.tmdbmovieswithpaging.network.ServiceBuilder
+import com.davevarga.tmdbmovieswithpaging.repository.MovieRepository
 import kotlinx.android.synthetic.main.fragment_list.*
 
 class ListFragment : Fragment(), MovieClickListener {
 
-    lateinit var swipeLayout: SwipeRefreshLayout
+    private lateinit var swipeLayout: SwipeRefreshLayout
+
     val args: ListFragmentArgs by navArgs()
 
-    private val viewModel by lazy { ViewModelProviders.of(
-        requireActivity(),
-        MovieViewModelFactory(requireActivity().application, args.minYear, args.maxYear)
-    )
-        .get(MovieViewModel::class.java) }
+    lateinit var movieRepository: MovieRepository
 
-    private val viewModelAdapter = PagingAdapter(this)
+    private val viewModel by lazy {
+        ViewModelProviders.of(
+            requireActivity(),
+            MovieViewModelFactory(
+                movieRepository
+            )
+        )
+            .get(MovieViewModel::class.java)
+    }
 
 
     override fun onCreateView(
@@ -41,19 +52,24 @@ class ListFragment : Fragment(), MovieClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.insert(args.minYear, args.maxYear)
-        swipeLayout = swipeRefresh
+        val apiService: GetData = ServiceBuilder.getNetworkClient(GetData::class.java)
+
+        movieRepository = MovieRepository(apiService)
+
+        val movieAdapter = MoviePagedlistAdapter(this)
+
+        hideKeyboard()
         recycler_view.apply {
             setHasFixedSize(true)
-            setItemViewCacheSize(9)
             layoutManager = LinearLayoutManager(context)
+            adapter = movieAdapter
         }
+        swipeLayout = swipeRefresh
 
-        viewModel.getMoviesPaged().observe(viewLifecycleOwner) { pagedList ->
-            viewModelAdapter.submitList(pagedList)
-            recycler_view.adapter = viewModelAdapter
+        viewModel.moviePagedList.observe(viewLifecycleOwner, Observer {
+            movieAdapter.submitList(it)
+        })
 
-        }
 
 
         filterButton.setOnClickListener { view: View ->
@@ -64,19 +80,22 @@ class ListFragment : Fragment(), MovieClickListener {
         swipeRefresh.setOnRefreshListener {
             swipeRefresh.isRefreshing = false
         }
-//        observeMovieModel()
 
     }
 
-//    private fun observeMovieModel() {
-//        viewModel.pMovieList.observe(viewLifecycleOwner, Observer { items ->
-//            items?.apply {
-//                viewModelAdapter.items = items
-//                recycler_view.adapter = viewModelAdapter
-//            }
-//        })
-//
-//    }
+    fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    fun Activity.hideKeyboard() {
+        hideKeyboard(currentFocus ?: View(this))
+    }
+
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 
 
     override fun onItemClick(item: Movie, position: Int) {
@@ -84,5 +103,6 @@ class ListFragment : Fragment(), MovieClickListener {
         findNavController().navigate(action)
 
     }
+
 
 }

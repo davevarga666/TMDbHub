@@ -1,17 +1,13 @@
 package com.davevarga.tmdbmovieswithpaging.models
 
 import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "movie_table")
 data class Movie(
 
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Int,
 
     @SerializedName("popularity")
     val popularity: String?,
@@ -92,8 +88,7 @@ data class SpokenLanguage(
     val language: String?
 )
 
-data class MovieList(
-    @SerializedName("page")
+data class MovieResponse(
     val page: Int,
 
     @SerializedName("total_results")

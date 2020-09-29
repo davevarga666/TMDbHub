@@ -1,6 +1,7 @@
 package com.davevarga.tmdbmovieswithpaging.network
 
-import com.davevarga.tmdbmovieswithpaging.models.MovieList
+import com.davevarga.tmdbmovieswithpaging.models.MovieResponse
+import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -8,12 +9,13 @@ import retrofit2.http.Query
 interface GetData {
 
     @GET("discover/movie")
-    suspend fun getDataByReleaseWindow(
+    fun getDataByReleaseWindow(
         @Query("api_key") apiKey: String,
         @Query("primary_release_date.gte") releaseDateGte: String,
-        @Query("primary_release_date.lte") releaseDateLte: String
+        @Query("primary_release_date.lte") releaseDateLte: String,
+        @Query("page") page: Int
 
-    ): Response<MovieList>
+    ): Single<MovieResponse>
 
 }
 

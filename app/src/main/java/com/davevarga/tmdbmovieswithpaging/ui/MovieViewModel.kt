@@ -1,58 +1,52 @@
 package com.davevarga.tmdbmovieswithpaging.ui
 
 import android.app.Application
-import androidx.lifecycle.*
-import androidx.paging.*
-import com.davevarga.tmdbmovieswithpaging.db.AppDatabase
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagedList
 import com.davevarga.tmdbmovieswithpaging.models.Movie
 import com.davevarga.tmdbmovieswithpaging.repository.MovieRepository
-import kotlinx.coroutines.launch
+import com.davevarga.tmdbmovieswithpaging.repository.NetworkState
+import com.davevarga.tmdbmovieswithpaging.ui.FilterFragment.Companion.range
+import io.reactivex.disposables.CompositeDisposable
 
-class MovieViewModel(application: Application, minYear: String, maxYear: String) : AndroidViewModel(application) {
+class MovieViewModel(private val movieRepository: MovieRepository) :
+    ViewModel() {
 
-    private val repository: MovieRepository =
-        MovieRepository(AppDatabase.getInstance(application).movieDao())
+    private val minimumYear = range.minYear
+    private val maximumYear = range.maxYear
 
-    private val minimumYear = minYear
-    private val maximumYear = maxYear
+    private val compositeDisposable = CompositeDisposable()
 
-
-    private val liveResults: LiveData<PagedList<Movie>>
-
-
-    init {
-        insert(minimumYear, maximumYear)
-
-        liveResults = LivePagedListBuilder(
-            repository.listenForMovies(),
-            PagedList.Config.Builder()
-                .setPageSize(20)
-                .setPrefetchDistance(20)
-                .setEnablePlaceholders(true)
-                .build())
-            .setInitialLoadKey(0)
-            .build()
-
+    val moviePagedList: LiveData<PagedList<Movie>> by lazy {
+        movieRepository.fetchLiveMoviePagedList(compositeDisposable)
     }
 
-    fun getMoviesPaged() = liveResults
+//    val networkState: LiveData<NetworkState> by lazy {
+//        movieRepository.getNetworkState()
+//    }
+//
+//    fun listIsEmpty(): Boolean {
+//        return moviePagedList.value?.isEmpty() ?: true
+//    }
 
-    fun insert(minYear: String, maxYear: String) {
-        viewModelScope.launch {
-            repository.insertMovieList(minYear,  maxYear)
-        }
 
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
     }
 
 }
+    @Suppress("UNCHECKED_CAST")
+    class MovieViewModelFactory(
+        val movieRepository: MovieRepository
+    ) : ViewModelProvider.Factory {
 
-@Suppress("UNCHECKED_CAST")
-class MovieViewModelFactory(val application: Application, val minYear: String, val maxYear: String) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MovieViewModel::class.java)) {
-            return MovieViewModel(application, minYear, maxYear) as T
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(MovieViewModel::class.java)) {
+                return MovieViewModel(movieRepository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
-}

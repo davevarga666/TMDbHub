@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -12,15 +14,18 @@ import com.davevarga.tmdbmovieswithpaging.R
 import com.davevarga.tmdbmovieswithpaging.databinding.LayoutMovieListItemBinding
 import com.davevarga.tmdbmovieswithpaging.models.Movie
 
-class MovieRecyclerAdapter(var items: List<Movie>, var clickListener: MovieClickListener?) :
-    RecyclerView.Adapter<MovieRecyclerAdapter.MovieViewHolder>() {
-
+class MoviePagedlistAdapter(var clickListener: MovieClickListener) :
+    PagedListAdapter<Movie, MoviePagedlistAdapter.MyViewHolder>(MovieDiffCallback()) {
 
     lateinit var binding: LayoutMovieListItemBinding
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): MoviePagedlistAdapter.MyViewHolder {
 
         val inflater = LayoutInflater.from(parent.context)
+        val view: View
 
         binding = DataBindingUtil.inflate(
             inflater,
@@ -30,33 +35,18 @@ class MovieRecyclerAdapter(var items: List<Movie>, var clickListener: MovieClick
         )
 
 
-        return MovieViewHolder(
+        return MoviePagedlistAdapter.MyViewHolder(
             binding.root
         )
 
     }
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        return holder.bind(items.get(position), binding, clickListener!!)
+    override fun onBindViewHolder(holder: MoviePagedlistAdapter.MyViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it, binding, clickListener) }
     }
 
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
-    //to remove duplicates
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
-
-    class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(
             movieItem: Movie,
             binding: LayoutMovieListItemBinding,
@@ -88,9 +78,22 @@ class MovieRecyclerAdapter(var items: List<Movie>, var clickListener: MovieClick
 
     }
 
+    class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
+
 }
 
 interface MovieClickListener {
     fun onItemClick(item: Movie, position: Int)
 }
+
 

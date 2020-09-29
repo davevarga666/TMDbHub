@@ -1,31 +1,40 @@
 package com.davevarga.tmdbmovieswithpaging.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
-import androidx.paging.PagingSource
-import com.davevarga.tmdbmovieswithpaging.db.MovieDao
+import androidx.lifecycle.Transformations
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.davevarga.tmdbmovieswithpaging.models.Movie
 import com.davevarga.tmdbmovieswithpaging.network.GetData
+import com.davevarga.tmdbmovieswithpaging.network.POST_PER_PAGE
 import com.davevarga.tmdbmovieswithpaging.network.ServiceBuilder
-import com.davevarga.tmdbmovieswithpaging.ui.MovieRecyclerAdapter
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 
-class MovieRepository(private val movieDao: MovieDao) {
+class MovieRepository(private val apiService : GetData) {
 
-    fun listenForMovies(): DataSource.Factory<Int, Movie> = movieDao.listenForMovies()
+    lateinit var moviePagedList: LiveData<PagedList<Movie>>
+    lateinit var moviesDataSourceFactory: MovieDataSourceFactory
 
-    suspend fun insertMovieList(minYear: String, maxYear: String) {
-        withContext(Dispatchers.IO) {
-            val movieList = ServiceBuilder.getNetworkClient(GetData::class.java)
-                .getDataByReleaseWindow(
-                    "d00127676d268780e41811f616e4fbb0",
-                    minYear + "-01-01",
-                    maxYear + "-12-31"
-                )
-            movieDao.insertMovieList(MovieRecyclerAdapter(movieList.body()!!.movieList, null).items)
-        }
+    fun fetchLiveMoviePagedList (compositeDisposable: CompositeDisposable) : LiveData<PagedList<Movie>> {
+        moviesDataSourceFactory = MovieDataSourceFactory(apiService, compositeDisposable)
+
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setPageSize(POST_PER_PAGE)
+            .build()
+
+        moviePagedList = LivePagedListBuilder(moviesDataSourceFactory, config).build()
+
+        return moviePagedList
     }
 
+//    fun getNetworkState(): LiveData<NetworkState> {
+//        return Transformations.switchMap<MovieDataSource, NetworkState>(
+//            moviesDataSourceFactory.moviesLiveDataSource, MovieDataSource::networkState)
+//    }
 
 }
