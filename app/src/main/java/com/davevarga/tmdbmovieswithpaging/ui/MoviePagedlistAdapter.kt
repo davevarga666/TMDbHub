@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.davevarga.tmdbmovieswithpaging.R
 import com.davevarga.tmdbmovieswithpaging.databinding.LayoutMovieListItemBinding
 import com.davevarga.tmdbmovieswithpaging.models.Movie
+import com.davevarga.tmdbmovieswithpaging.network.POSTER_BASE_URL
 
 class MoviePagedlistAdapter(var clickListener: MovieClickListener) :
     PagedListAdapter<Movie, MoviePagedlistAdapter.MyViewHolder>(MovieDiffCallback()) {
@@ -45,6 +46,14 @@ class MoviePagedlistAdapter(var clickListener: MovieClickListener) :
         getItem(position)?.let { holder.bind(it, binding, clickListener) }
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(
@@ -69,7 +78,7 @@ class MoviePagedlistAdapter(var clickListener: MovieClickListener) :
 
             Glide.with(itemView.context)
                 .applyDefaultRequestOptions(requestOptions)
-                .load("http://image.tmdb.org/t/p/w500/" + movieItem.posterPath)
+                .load(POSTER_BASE_URL + movieItem.posterPath)
                 .error(R.drawable.error_image)
                 .placeholder(circularProgressDrawable)
                 .into(binding.moviePoster)

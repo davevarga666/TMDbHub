@@ -5,11 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.davevarga.tmdbmovieswithpaging.models.Movie
 import com.davevarga.tmdbmovieswithpaging.network.*
-import com.davevarga.tmdbmovieswithpaging.ui.FilterFragment.Companion.range
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class MovieDataSource (private val apiService : GetData, private val compositeDisposable: CompositeDisposable)
+class MovieDataSource (private val apiService : GetData, private val compositeDisposable: CompositeDisposable, val minYear: String, val maxYear: String)
     : PageKeyedDataSource<Int, Movie>(){
 
     private var page = FIRST_PAGE
@@ -22,7 +21,7 @@ class MovieDataSource (private val apiService : GetData, private val compositeDi
         networkState.postValue(NetworkState.LOADING)
 
         compositeDisposable.add(
-            apiService.getDataByReleaseWindow(API_KEY, range.minYear, range.maxYear, page)
+            apiService.getDataByReleaseWindow(API_KEY, minYear + START_OF_YEAR, maxYear + END_OF_YEAR, page)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {
@@ -40,7 +39,7 @@ class MovieDataSource (private val apiService : GetData, private val compositeDi
         networkState.postValue(NetworkState.LOADING)
 
         compositeDisposable.add(
-            apiService.getDataByReleaseWindow(API_KEY, range.minYear, range.maxYear, params.key)
+            apiService.getDataByReleaseWindow(API_KEY, minYear + START_OF_YEAR, maxYear + END_OF_YEAR, params.key)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {

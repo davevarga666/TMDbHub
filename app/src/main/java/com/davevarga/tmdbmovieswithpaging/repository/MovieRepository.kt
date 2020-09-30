@@ -2,6 +2,7 @@ package com.davevarga.tmdbmovieswithpaging.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -19,8 +20,8 @@ class MovieRepository(private val apiService : GetData) {
     lateinit var moviePagedList: LiveData<PagedList<Movie>>
     lateinit var moviesDataSourceFactory: MovieDataSourceFactory
 
-    fun fetchLiveMoviePagedList (compositeDisposable: CompositeDisposable) : LiveData<PagedList<Movie>> {
-        moviesDataSourceFactory = MovieDataSourceFactory(apiService, compositeDisposable)
+    fun fetchLiveMoviePagedList (compositeDisposable: CompositeDisposable, minYear: String, maxYear: String) : LiveData<PagedList<Movie>> {
+        moviesDataSourceFactory = MovieDataSourceFactory(apiService, compositeDisposable, minYear, maxYear)
 
         val config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
@@ -32,9 +33,9 @@ class MovieRepository(private val apiService : GetData) {
         return moviePagedList
     }
 
-//    fun getNetworkState(): LiveData<NetworkState> {
-//        return Transformations.switchMap<MovieDataSource, NetworkState>(
-//            moviesDataSourceFactory.moviesLiveDataSource, MovieDataSource::networkState)
-//    }
+    fun getNetworkState(): LiveData<NetworkState> {
+        return Transformations.switchMap<MovieDataSource, NetworkState>(
+            moviesDataSourceFactory.moviesLiveDataSource, MovieDataSource::networkState)
+    }
 
 }

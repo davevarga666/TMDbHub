@@ -18,10 +18,6 @@ import kotlinx.android.synthetic.main.fragment_filter.*
 
 class FilterFragment : Fragment() {
 
-    companion object {
-        var range = Years("2019" + START_OF_YEAR, "2020" + END_OF_YEAR)
-    }
-
     private lateinit var binding: FragmentFilterBinding
 
     override fun onCreateView(
@@ -40,11 +36,11 @@ class FilterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.saveButton.setOnClickListener { view: View ->
-            range.minYear = minYear_value.text.toString()
-            range.maxYear = maxYear_value.text.toString()
-            val filterByYearAction = FilterFragmentDirections.actionFilterFragmentToListFragment()
+            val filterByYearAction = FilterFragmentDirections.actionFilterFragmentToListFragment(
+                minYear = minYear_value.text.toString(),
+                maxYear = maxYear_value.text.toString()
+            )
             view.findNavController().navigate(filterByYearAction)
-
         }
     }
 

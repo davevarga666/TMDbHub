@@ -3,6 +3,7 @@ package com.davevarga.tmdbmovieswithpaging.ui
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +36,7 @@ class ListFragment : Fragment(), MovieClickListener {
         ViewModelProviders.of(
             requireActivity(),
             MovieViewModelFactory(
-                movieRepository
+                movieRepository, args.minYear, args.maxYear
             )
         )
             .get(MovieViewModel::class.java)
@@ -68,6 +69,7 @@ class ListFragment : Fragment(), MovieClickListener {
 
         viewModel.moviePagedList.observe(viewLifecycleOwner, Observer {
             movieAdapter.submitList(it)
+            Log.d("ListFr", viewModel.minYear)
         })
 
 
