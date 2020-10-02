@@ -17,4 +17,9 @@ class MovieDataSourceFactory (private val apiService : GetData, private val comp
         moviesLiveDataSource.postValue(movieDataSource)
         return movieDataSource
     }
+
+    fun refresh() {
+        moviesLiveDataSource.value?.invalidate()
+    }
+
 }

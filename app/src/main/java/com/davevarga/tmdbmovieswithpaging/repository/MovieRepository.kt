@@ -1,19 +1,13 @@
 package com.davevarga.tmdbmovieswithpaging.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.davevarga.tmdbmovieswithpaging.models.Movie
 import com.davevarga.tmdbmovieswithpaging.network.GetData
 import com.davevarga.tmdbmovieswithpaging.network.POST_PER_PAGE
-import com.davevarga.tmdbmovieswithpaging.network.ServiceBuilder
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import retrofit2.Response
 
 class MovieRepository(private val apiService : GetData) {
 
@@ -33,9 +27,13 @@ class MovieRepository(private val apiService : GetData) {
         return moviePagedList
     }
 
-    fun getNetworkState(): LiveData<NetworkState> {
-        return Transformations.switchMap<MovieDataSource, NetworkState>(
-            moviesDataSourceFactory.moviesLiveDataSource, MovieDataSource::networkState)
+    fun refresh() {
+        moviesDataSourceFactory.refresh()
     }
+
+//    fun getNetworkState(): LiveData<NetworkState> {
+//        return Transformations.switchMap<MovieDataSource, NetworkState>(
+//            moviesDataSourceFactory.moviesLiveDataSource, MovieDataSource::networkState)
+//    }
 
 }

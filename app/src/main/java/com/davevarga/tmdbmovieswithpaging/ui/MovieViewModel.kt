@@ -1,17 +1,13 @@
 package com.davevarga.tmdbmovieswithpaging.ui
 
-import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import androidx.paging.PagedList
 import com.davevarga.tmdbmovieswithpaging.models.Movie
 import com.davevarga.tmdbmovieswithpaging.repository.MovieRepository
 import com.davevarga.tmdbmovieswithpaging.repository.NetworkState
 import io.reactivex.disposables.CompositeDisposable
 
-class MovieViewModel(private val movieRepository: MovieRepository, val minYear: String, val maxYear: String) :
+class MovieViewModel(private val movieRepository: MovieRepository, var minYear: String, var maxYear: String) :
     ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -20,14 +16,17 @@ class MovieViewModel(private val movieRepository: MovieRepository, val minYear: 
         movieRepository.fetchLiveMoviePagedList(compositeDisposable, minYear, maxYear)
     }
 
-    val networkState: LiveData<NetworkState> by lazy {
-        movieRepository.getNetworkState()
+//    val networkState: LiveData<NetworkState> by lazy {
+//        movieRepository.getNetworkState()
+//    }
+
+    fun refresh() {
+        movieRepository.refresh()
     }
 
-    fun listIsEmpty(): Boolean {
-        return moviePagedList.value?.isEmpty() ?: true
-    }
-
+//    fun listIsEmpty(): Boolean {
+//        return moviePagedList.value?.isEmpty() ?: true
+//    }
 
     override fun onCleared() {
         super.onCleared()

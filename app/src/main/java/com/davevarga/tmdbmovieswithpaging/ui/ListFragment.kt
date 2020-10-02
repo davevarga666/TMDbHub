@@ -56,7 +56,6 @@ class ListFragment : Fragment(), MovieClickListener {
         val apiService: GetData = ServiceBuilder.getNetworkClient(GetData::class.java)
 
         movieRepository = MovieRepository(apiService)
-
         val movieAdapter = MoviePagedlistAdapter(this)
 
         hideKeyboard()
@@ -72,8 +71,7 @@ class ListFragment : Fragment(), MovieClickListener {
             Log.d("ListFr", viewModel.minYear)
         })
 
-
-
+        viewModel.refresh()
         filterButton.setOnClickListener { view: View ->
             view.findNavController().navigate(action_listFragment_to_filterFragment)
 
@@ -89,9 +87,9 @@ class ListFragment : Fragment(), MovieClickListener {
         view?.let { activity?.hideKeyboard(it) }
     }
 
-    fun Activity.hideKeyboard() {
-        hideKeyboard(currentFocus ?: View(this))
-    }
+//    fun Activity.hideKeyboard() {
+//        hideKeyboard(currentFocus ?: View(this))
+//    }
 
     fun Context.hideKeyboard(view: View) {
         val inputMethodManager =

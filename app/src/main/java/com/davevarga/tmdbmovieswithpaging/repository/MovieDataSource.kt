@@ -11,6 +11,11 @@ import io.reactivex.schedulers.Schedulers
 class MovieDataSource (private val apiService : GetData, private val compositeDisposable: CompositeDisposable, val minYear: String, val maxYear: String)
     : PageKeyedDataSource<Int, Movie>(){
 
+    companion object {
+        var minimumYear = "2019"
+        var maximumYear = "2020"
+    }
+
     private var page = FIRST_PAGE
 
     val networkState: MutableLiveData<NetworkState> = MutableLiveData()
@@ -21,7 +26,7 @@ class MovieDataSource (private val apiService : GetData, private val compositeDi
         networkState.postValue(NetworkState.LOADING)
 
         compositeDisposable.add(
-            apiService.getDataByReleaseWindow(API_KEY, minYear + START_OF_YEAR, maxYear + END_OF_YEAR, page)
+            apiService.getDataByReleaseWindow(API_KEY, minimumYear + START_OF_YEAR, maximumYear + END_OF_YEAR, page)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {
@@ -39,7 +44,7 @@ class MovieDataSource (private val apiService : GetData, private val compositeDi
         networkState.postValue(NetworkState.LOADING)
 
         compositeDisposable.add(
-            apiService.getDataByReleaseWindow(API_KEY, minYear + START_OF_YEAR, maxYear + END_OF_YEAR, params.key)
+            apiService.getDataByReleaseWindow(API_KEY, minimumYear+ START_OF_YEAR, maximumYear + END_OF_YEAR, params.key)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {
