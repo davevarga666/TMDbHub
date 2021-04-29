@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/listFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home"
+        android:title="@string/menu_home" />
+    <item
+        android:id="@+id/filterFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_shopping_bag"
+        android:title="@string/menu_filter" />
+    <item
+        android:id="@+id/myCollectionFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_reorder"
+        android:title="@string/menu_myMovies" />
+
+    <item
+        android:id="@+id/comingSoonFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_swan_wallet"
+        android:title="@string/coming_soon" />
+
+</menu>
+
+

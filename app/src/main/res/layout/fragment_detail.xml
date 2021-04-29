@@ -7,7 +7,7 @@
 
         <variable
             name="movie"
-            type="com.davevarga.tmdbmovieswithpaging.models.Movie" />
+            type="com.davevarga.tmdbmoviespaging.models.Movie" />
 
     </data>
 
@@ -96,6 +96,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     tools:text="Movie release Date" />
 
+                <TextView
+                    android:id="@+id/vote_average"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="#000000"
+                    android:shadowDx="1.5"
+                    android:shadowDy="1.3"
+                    android:shadowRadius="1.6"
+                    android:text="@{movie.voteAverage.toString()}"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="8.2" />
+
 
                 <TextView
                     android:id="@+id/overviewSign"
@@ -137,6 +151,15 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:text="Overview" />
+
+                <Button
+                    android:id="@+id/addToCollection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save_to_collection"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/overview"
+                    />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
