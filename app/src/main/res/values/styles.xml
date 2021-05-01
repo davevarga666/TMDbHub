@@ -7,8 +7,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     <style name="Toolbar.TitleText" parent="@android:style/TextAppearance.Medium">
-        <item name="android:textSize">28sp</item>
-        <item name="android:textColor">#F2EFF5</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#FFFFFF</item>
     </style>
     <style name="Toolbar.CollapsedTitleText" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">20sp</item>

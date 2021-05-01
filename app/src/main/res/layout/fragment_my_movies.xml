@@ -11,6 +11,7 @@
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
         tools:context=".ui.MyCollectionFragment">
 
         <androidx.recyclerview.widget.RecyclerView

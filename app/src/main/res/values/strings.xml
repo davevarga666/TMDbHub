@@ -3,7 +3,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="poster">poster</string>
     <string name="background_image">background image</string>
-    <string name="please_select_range">Please select range</string>
+    <string name="please_select_range">Filter via year range</string>
     <string name="max_year">hello_blank_fragment</string>
     <string name="ok">ok</string>
     <string name="minDef">2019</string>

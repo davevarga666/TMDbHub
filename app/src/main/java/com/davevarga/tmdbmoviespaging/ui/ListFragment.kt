@@ -13,7 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.models.GenreString
@@ -64,13 +66,22 @@ class ListFragment : Fragment(), MovieClickListener {
         movieViewModel.refresh()
         movieViewModel.moviePagedList = networkRepository.fetchLiveMoviePagedList(compositeDisposable, args.minYear, args.maxYear, args.genres)
         hideKeyboard()
+
+
+
         recycler_view.apply {
             setHasFixedSize(true)
             adapter = movieAdapter
-            layoutManager = LinearLayoutManager(context)
+            layoutManager =  GridLayoutManager(
+                context, // context
+                2, // span count
+                RecyclerView.VERTICAL, // orientation
+                false // reverse layout
+            )
+            // LinearLayoutManager(context)
         }
-        swipeLayout = swipeRefresh
 
+        swipeLayout = swipeRefresh
 
         movieViewModel.moviePagedList.observe(viewLifecycleOwner, Observer {
             movieAdapter.submitList(it)

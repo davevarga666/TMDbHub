@@ -24,7 +24,11 @@
             android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:itemTextColor="@color/black"
+            app:itemTextColor="#ffffff"
+            app:itemIconTint="#CFCFCF"
+            android:background="@color/colorPrimary"
+            android:padding="5dp"
+            android:backgroundTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/my_navigation_items" />
