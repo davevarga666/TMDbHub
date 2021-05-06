@@ -24,7 +24,7 @@
         <argument
             android:name="genres"
             app:argType="string"
-            android:defaultValue="16" />
+            android:defaultValue="" />
         <action
             android:id="@+id/action_listFragment_to_filterFragment"
             app:destination="@id/filterFragment" />

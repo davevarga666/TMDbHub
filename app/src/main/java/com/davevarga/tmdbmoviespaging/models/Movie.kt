@@ -71,7 +71,9 @@ data class Genre(
     val genreId: String?,
 
     @SerializedName("name")
-    val genreName: String?
+    val genreName: String?,
+
+    val isChecked: Boolean? = false
 )
 
 data class ProdCompany(

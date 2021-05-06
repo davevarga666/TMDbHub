@@ -1,6 +1,5 @@
 package com.davevarga.tmdbmoviespaging.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,9 +63,12 @@ class GenreAdapter(var items: List<Genre>) :
             binding: LayoutGenreListItemBinding
         ) {
             binding.genre = genre
+
             binding.simpleCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
+                    buttonView.isChecked = true
                     filledIdList.add(binding.genre?.genreId as String)
+//                    filledIdList.add(Pair(binding.genre?.genreId, true))
                 } else {
                     filledIdList.removeAll(filledIdList)
                 }

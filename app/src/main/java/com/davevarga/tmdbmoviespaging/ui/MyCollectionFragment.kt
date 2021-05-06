@@ -27,7 +27,7 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
             .get(MyCollectionViewModel::class.java)
     }
 
-    private val movieList: List<Movie> = arrayListOf()
+    private val movieList: MutableList<Movie> = mutableListOf()
     private val viewModelAdapter = MyCollectionRecyclerAdapter(movieList, this)
 
     override fun onCreateView(
@@ -75,9 +75,18 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
 //            else -> super.onOptionsItemSelected(item)
 //        }
 //    }
+
     override fun onItemClick(item: Movie, position: Int) {
+//        removeItem(position)
         val action = MyCollectionFragmentDirections.actionMyCollectionFragmentToDetailFragment(item)
         findNavController().navigate(action)
 
+    }
+
+    override fun onDeleteClick(item: Movie, position: Int) {
+        viewModelAdapter.items.removeAt(position)
+        viewModel.deleteMovie(item.id)
+        myMovies_recycler_view.recycledViewPool.clear()
+        viewModelAdapter.notifyDataSetChanged()
     }
 }

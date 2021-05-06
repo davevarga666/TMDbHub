@@ -111,7 +111,7 @@
                                         android:layout_height="11dp"
                                         android:layout_marginLeft="3dp"
                                         android:src="@drawable/ic_star"
-                                        android:tint="@color/yellow" />
+                                        app:tint="@color/yellow" />
                                 </LinearLayout>
                             </LinearLayout>
 

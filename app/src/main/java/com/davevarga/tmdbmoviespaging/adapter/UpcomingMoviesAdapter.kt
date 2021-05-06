@@ -12,13 +12,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.databinding.LayoutCollectionListItemBinding
+import com.davevarga.tmdbmoviespaging.databinding.LayoutMovieListItemBinding
 import com.davevarga.tmdbmoviespaging.models.Movie
 import com.davevarga.tmdbmoviespaging.network.POSTER_BASE_URL
 
 class UpcomingMoviesAdapter(var clickListener: MovieClickListener) :
     PagedListAdapter<Movie, UpcomingMoviesAdapter.MyViewHolder>(MovieDiffCallback()) {
 
-    lateinit var binding: LayoutCollectionListItemBinding
+    lateinit var binding: LayoutMovieListItemBinding
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -30,7 +31,7 @@ class UpcomingMoviesAdapter(var clickListener: MovieClickListener) :
 
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.layout_collection_list_item,
+            R.layout.layout_movie_list_item,
             parent,
             false
         )
@@ -58,7 +59,7 @@ class UpcomingMoviesAdapter(var clickListener: MovieClickListener) :
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(
             movieItem: Movie,
-            binding: LayoutCollectionListItemBinding,
+            binding: LayoutMovieListItemBinding,
             clickListener: MovieClickListener
         ) {
             binding.movieItem = movieItem

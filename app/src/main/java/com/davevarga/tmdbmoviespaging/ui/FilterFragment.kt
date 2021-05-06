@@ -1,6 +1,7 @@
 package com.davevarga.tmdbmoviespaging.ui
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +29,6 @@ class FilterFragment : Fragment() {
     private var newGenreString: GenreString = GenreString(0, "27")
 
     lateinit var networkRepository: NetworkRepository
-
     private val genreList: List<Genre> = arrayListOf()
     private val viewModelAdapter = GenreAdapter(genreList)
 
@@ -69,12 +69,12 @@ class FilterFragment : Fragment() {
             adapter = viewModelAdapter
         }
 
-//        genreViewModel.genreList
+        genreViewModel.genreList
 
         binding.saveButton.setOnClickListener { view: View ->
 
             newGenreString.genres = filledIdList.joinToString("|")
-            genreViewModel.insert(newGenreString)
+            Log.i("FILLED", filledIdList.toString())
             val toDisplay = newGenreString.genres
 
             val filterByYearAction = FilterFragmentDirections.actionFilterFragmentToListFragment(
@@ -85,4 +85,5 @@ class FilterFragment : Fragment() {
             view.findNavController().navigate(filterByYearAction)
         }
     }
+    
 }

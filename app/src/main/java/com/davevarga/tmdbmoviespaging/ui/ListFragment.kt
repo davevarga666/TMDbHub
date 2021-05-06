@@ -78,7 +78,6 @@ class ListFragment : Fragment(), MovieClickListener {
                 RecyclerView.VERTICAL, // orientation
                 false // reverse layout
             )
-            // LinearLayoutManager(context)
         }
 
         swipeLayout = swipeRefresh
