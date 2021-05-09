@@ -1,7 +1,6 @@
 package com.davevarga.tmdbmoviespaging.ui
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,16 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.adapter.GenreAdapter
 import com.davevarga.tmdbmoviespaging.adapter.GenreAdapter.Companion.filledIdList
-import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.databinding.FragmentFilterBinding
 import com.davevarga.tmdbmoviespaging.models.Genre
 import com.davevarga.tmdbmoviespaging.models.GenreString
 import com.davevarga.tmdbmoviespaging.network.GetData
 import com.davevarga.tmdbmoviespaging.network.ServiceBuilder
 import com.davevarga.tmdbmoviespaging.repository.NetworkRepository
-import kotlinx.android.synthetic.main.fragment_filter.*
 
 
 class FilterFragment : Fragment() {
@@ -41,15 +39,12 @@ class FilterFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         requireActivity().setTitle("Filter")
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_filter, container, false
-        )
-
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_filter, container, false)
         return binding.root
     }
 
@@ -63,7 +58,7 @@ class FilterFragment : Fragment() {
         genreViewModel.getGenreList()
         viewModelAdapter.items = genreViewModel.genreList
 
-        genreRecyclerView.apply {
+        binding.genreRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(context, 3)
             adapter = viewModelAdapter
@@ -78,12 +73,12 @@ class FilterFragment : Fragment() {
             val toDisplay = newGenreString.genres
 
             val filterByYearAction = FilterFragmentDirections.actionFilterFragmentToListFragment(
-                minYear = minYear_value.text.toString(),
-                maxYear = maxYear_value.text.toString(),
+                minYear = binding.minYearValue.text.toString(),
+                maxYear = binding.maxYearValue.text.toString(),
                 genres = toDisplay
             )
             view.findNavController().navigate(filterByYearAction)
         }
     }
-    
+
 }

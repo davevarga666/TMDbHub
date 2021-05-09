@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -18,17 +19,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.davevarga.tmdbmoviespaging.R
+import com.davevarga.tmdbmoviespaging.databinding.FragmentListBinding
 import com.davevarga.tmdbmoviespaging.models.GenreString
 import com.davevarga.tmdbmoviespaging.models.Movie
 import com.davevarga.tmdbmoviespaging.network.GetData
 import com.davevarga.tmdbmoviespaging.network.ServiceBuilder
 import com.davevarga.tmdbmoviespaging.repository.NetworkRepository
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_list.*
 
 class ListFragment : Fragment(), MovieClickListener {
 
     private lateinit var swipeLayout: SwipeRefreshLayout
+    private lateinit var binding: FragmentListBinding
 
     val args: ListFragmentArgs by navArgs()
 
@@ -47,12 +49,15 @@ class ListFragment : Fragment(), MovieClickListener {
 
     private val movieAdapter = MoviePagedlistAdapter(this)
 
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         requireActivity().setTitle("Home")
-        return inflater.inflate(R.layout.fragment_list, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,36 +65,33 @@ class ListFragment : Fragment(), MovieClickListener {
 
         val apiService: GetData = ServiceBuilder.getNetworkClient(GetData::class.java)
 
-        Log.i("ARGS", args.genres)
         networkRepository = NetworkRepository(apiService)
 
         movieViewModel.refresh()
         movieViewModel.moviePagedList = networkRepository.fetchLiveMoviePagedList(compositeDisposable, args.minYear, args.maxYear, args.genres)
         hideKeyboard()
 
-
-
-        recycler_view.apply {
+        binding.recyclerView.apply {
             setHasFixedSize(true)
             adapter = movieAdapter
             layoutManager =  GridLayoutManager(
-                context, // context
-                2, // span count
-                RecyclerView.VERTICAL, // orientation
-                false // reverse layout
+                context,
+                2,
+                RecyclerView.VERTICAL,
+                false
             )
         }
 
-        swipeLayout = swipeRefresh
+        swipeLayout = binding.swipeRefresh
 
         movieViewModel.moviePagedList.observe(viewLifecycleOwner, Observer {
             movieAdapter.submitList(it)
 
         })
 
-        swipeRefresh.setOnRefreshListener {
+        binding.swipeRefresh.setOnRefreshListener {
             movieViewModel.refresh()
-            swipeRefresh.isRefreshing = false
+            binding.swipeRefresh.isRefreshing = false
         }
 
     }

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.databinding.FragmentMyMoviesBinding
 import com.davevarga.tmdbmoviespaging.models.Movie
-import kotlinx.android.synthetic.main.fragment_my_movies.*
 
 class MyCollectionFragment : Fragment(), MyCollectionClickListener {
 
@@ -48,7 +47,7 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
 
         setHasOptionsMenu(true)
 
-        myMovies_recycler_view.apply {
+        binding.myMoviesRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
         }
@@ -59,7 +58,7 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
         viewModel.myMovieList.observe(viewLifecycleOwner, Observer { items ->
             items?.apply {
                 viewModelAdapter.items = items
-                myMovies_recycler_view.adapter = viewModelAdapter
+                binding.myMoviesRecyclerView.adapter = viewModelAdapter
             }
         })
 
@@ -86,7 +85,7 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
     override fun onDeleteClick(item: Movie, position: Int) {
         viewModelAdapter.items.removeAt(position)
         viewModel.deleteMovie(item.id)
-        myMovies_recycler_view.recycledViewPool.clear()
+        binding.myMoviesRecyclerView.recycledViewPool.clear()
         viewModelAdapter.notifyDataSetChanged()
     }
 }

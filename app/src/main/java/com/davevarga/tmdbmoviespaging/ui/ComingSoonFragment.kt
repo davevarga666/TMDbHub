@@ -3,29 +3,29 @@ package com.davevarga.tmdbmoviespaging.ui
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.davevarga.tmdbmoviespaging.R
+import com.davevarga.tmdbmoviespaging.databinding.FragmentComingSoonBinding
+import com.davevarga.tmdbmoviespaging.databinding.FragmentListBinding
 import com.davevarga.tmdbmoviespaging.models.Movie
 import com.davevarga.tmdbmoviespaging.network.GetData
 import com.davevarga.tmdbmoviespaging.network.ServiceBuilder
 import com.davevarga.tmdbmoviespaging.repository.NetworkRepository
-import kotlinx.android.synthetic.main.fragment_coming_soon.*
-import kotlinx.android.synthetic.main.fragment_list.swipeRefresh
 
 class ComingSoonFragment : Fragment(), MovieClickListener {
 
     private lateinit var swipeLayout: SwipeRefreshLayout
+    private lateinit var binding: FragmentComingSoonBinding
 
     lateinit var networkRepository: NetworkRepository
 
@@ -40,11 +40,13 @@ class ComingSoonFragment : Fragment(), MovieClickListener {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         requireActivity().setTitle("Coming Soon")
-        return inflater.inflate(R.layout.fragment_coming_soon, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_coming_soon, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,14 +58,14 @@ class ComingSoonFragment : Fragment(), MovieClickListener {
         val movieAdapter = UpcomingMoviesAdapter(this)
 
         hideKeyboard()
-        upcoming_recycler_view.apply {
+        binding.upcomingRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
         }
 
         viewModel.upcomingPagedList.observe(viewLifecycleOwner, Observer {
             movieAdapter.submitList(it)
-            upcoming_recycler_view.adapter = movieAdapter
+            binding.upcomingRecyclerView.adapter = movieAdapter
 
         })
 
