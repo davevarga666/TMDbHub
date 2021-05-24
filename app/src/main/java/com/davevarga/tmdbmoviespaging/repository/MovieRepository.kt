@@ -9,8 +9,6 @@ class MovieRepository(private val movieDao: MovieDao) {
 
 
     fun getCollection(): LiveData<MutableList<Movie>> = movieDao.getCollection()
-    fun getGenres(): LiveData<List<GenreString>> = movieDao.getGenres()
-    suspend fun getGenresNLD(): List<GenreString> = movieDao.getGenresNLD()
 
     suspend fun insertMovie(movie: Movie) {
         movieDao.insertMovie(movie)

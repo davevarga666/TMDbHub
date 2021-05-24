@@ -50,15 +50,16 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        tools:ignore="UselessParent">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="right"
+                            android:layout_gravity="end"
                             android:orientation="horizontal">
                             <TextView
                                 android:id="@+id/release_date"
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text="@{movieItem.releaseDate}"
                                 android:layout_weight="1"
@@ -70,15 +71,17 @@
                                 android:shadowRadius="1.6"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                tools:text="@tools:sample/date/hhmmss" />
+                                tools:text="@tools:sample/date/hhmmss"
+                                tools:ignore="SpUsage" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:layout_marginLeft="10dp"
-                                android:layout_gravity="right"
-                                android:orientation="horizontal">
+                                android:layout_marginStart="10dp"
+                                android:layout_gravity="end"
+                                android:orientation="horizontal"
+                                tools:ignore="UseCompoundDrawables">
                                 <TextView
                                     android:id="@+id/vote_average"
                                     android:layout_width="wrap_content"
@@ -92,14 +95,16 @@
                                     android:shadowRadius="1.6"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    tools:text="8.2" />
+                                    tools:text="8.2"
+                                    tools:ignore="SpUsage" />
 
                                 <ImageView
                                     android:layout_width="11dp"
                                     android:layout_height="11dp"
-                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginStart="3dp"
                                     android:src="@drawable/ic_star"
-                                    android:tint="@color/yellow"/>
+                                    app:tint="@color/yellow"
+                                    tools:ignore="ContentDescription" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -107,7 +112,7 @@
                             android:id="@+id/movie_title"
                             android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:text="@{movieItem.title}"
                             android:textColor="#ffffff"
                             android:textSize="15sp"

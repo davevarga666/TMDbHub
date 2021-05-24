@@ -55,17 +55,19 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="DisableBaselineAlignment,UselessParent">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            tools:ignore="InefficientWeight">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="right"
+                                android:layout_gravity="end"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -81,15 +83,17 @@
                                     android:textSize="11dp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    tools:text="@tools:sample/date/hhmmss" />
+                                    tools:text="@tools:sample/date/hhmmss"
+                                    tools:ignore="SpUsage" />
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="right"
-                                    android:layout_marginLeft="10dp"
+                                    android:layout_gravity="end"
+                                    android:layout_marginStart="10dp"
                                     android:gravity="center"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    tools:ignore="UseCompoundDrawables">
 
                                     <TextView
                                         android:id="@+id/vote_average"
@@ -104,14 +108,16 @@
                                         android:textSize="12dp"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        tools:text="8.2" />
+                                        tools:text="8.2"
+                                        tools:ignore="SpUsage,TooDeepLayout" />
 
                                     <ImageView
                                         android:layout_width="11dp"
                                         android:layout_height="11dp"
-                                        android:layout_marginLeft="3dp"
+                                        android:layout_marginStart="3dp"
                                         android:src="@drawable/ic_star"
-                                        app:tint="@color/yellow" />
+                                        app:tint="@color/yellow"
+                                        tools:ignore="ContentDescription" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -131,7 +137,8 @@
                                 android:textColor="#ffffff"
                                 android:textSize="15sp"
                                 android:textStyle="bold"
-                                tools:text="My Movie Title" />
+                                tools:text="My Movie Title"
+                                tools:ignore="NestedWeights" />
 
                         </LinearLayout>
                         <LinearLayout
@@ -143,9 +150,10 @@
                             android:backgroundTint="#cc1d1d"
                             android:gravity="center"
                             android:layout_alignParentTop="true"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
                             android:orientation="horizontal"
-                            android:padding="10dp">
+                            android:padding="10dp"
+                            tools:ignore="ObsoleteLayoutParam">
 
                             <ImageView
                                 android:layout_width="22dp"
@@ -153,7 +161,8 @@
                                 android:layout_gravity="center"
                                 android:adjustViewBounds="true"
                                 android:src="@drawable/ic_delete"
-                                app:tint="#ffffff" />
+                                app:tint="#ffffff"
+                                tools:ignore="ContentDescription" />
 
                         </LinearLayout>
                     </LinearLayout>

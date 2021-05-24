@@ -19,6 +19,7 @@ import com.davevarga.tmdbmoviespaging.models.Movie
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
+    private val args: DetailFragmentArgs by navArgs()
 
     private val myCollectionViewModel by lazy {
         ViewModelProviders.of(
@@ -27,8 +28,6 @@ class DetailFragment : Fragment() {
         )
             .get(MyCollectionViewModel::class.java)
     }
-
-    val args: DetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,26 +46,23 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        binding.movie = args.movieDetails
+        setBindings()
+        setBackgroundImage(view)
+    }
 
-        binding.addToCollection.setOnClickListener {
-            myCollectionViewModel.insert(binding.movie as Movie)
-        }
+    private fun setBackgroundImage(view: View) {
         val backgroundPoster = args.movieDetails.backdropPath
         Glide.with(view)
             .load("http://image.tmdb.org/t/p/w500/" + backgroundPoster)
             .into(binding.backgroundPoster)
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-//            R.id.action_up -> {
-//                findNavController().popBackStack()
-//                true
-//            }
-//
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
+    private fun setBindings() {
+        binding.movie = args.movieDetails
+
+        binding.addToCollection.setOnClickListener {
+            myCollectionViewModel.insert(binding.movie as Movie)
+        }
+    }
 
 }

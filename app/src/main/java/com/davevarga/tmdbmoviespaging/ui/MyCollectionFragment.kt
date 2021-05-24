@@ -17,6 +17,8 @@ import com.davevarga.tmdbmoviespaging.models.Movie
 class MyCollectionFragment : Fragment(), MyCollectionClickListener {
 
     private lateinit var binding: FragmentMyMoviesBinding
+    private val movieList: MutableList<Movie> = mutableListOf()
+    private val viewModelAdapter = MyCollectionRecyclerAdapter(movieList, this)
 
     private val viewModel by lazy {
         ViewModelProviders.of(
@@ -25,9 +27,6 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
         )
             .get(MyCollectionViewModel::class.java)
     }
-
-    private val movieList: MutableList<Movie> = mutableListOf()
-    private val viewModelAdapter = MyCollectionRecyclerAdapter(movieList, this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,11 +46,15 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
 
         setHasOptionsMenu(true)
 
+        setBindings()
+        observeMovieModel()
+    }
+
+    private fun setBindings() {
         binding.myMoviesRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
         }
-        observeMovieModel()
     }
 
     private fun observeMovieModel() {
@@ -63,17 +66,6 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
         })
 
     }
-
-    //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-//            R.id.action_up -> {
-//                findNavController().popBackStack()
-//                true
-//            }
-//
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
 
     override fun onItemClick(item: Movie, position: Int) {
 //        removeItem(position)

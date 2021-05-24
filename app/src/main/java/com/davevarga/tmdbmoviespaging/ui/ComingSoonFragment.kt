@@ -24,10 +24,8 @@ import com.davevarga.tmdbmoviespaging.repository.NetworkRepository
 
 class ComingSoonFragment : Fragment(), MovieClickListener {
 
-    private lateinit var swipeLayout: SwipeRefreshLayout
     private lateinit var binding: FragmentComingSoonBinding
-
-    lateinit var networkRepository: NetworkRepository
+    private lateinit var networkRepository: NetworkRepository
 
     private val viewModel by lazy {
         ViewModelProviders.of(
@@ -58,18 +56,26 @@ class ComingSoonFragment : Fragment(), MovieClickListener {
         val movieAdapter = UpcomingMoviesAdapter(this)
 
         hideKeyboard()
-        binding.upcomingRecyclerView.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-        }
+        setupRecyclerView()
 
+        observe(movieAdapter)
+
+
+    }
+
+    private fun observe(movieAdapter: UpcomingMoviesAdapter) {
         viewModel.upcomingPagedList.observe(viewLifecycleOwner, Observer {
             movieAdapter.submitList(it)
             binding.upcomingRecyclerView.adapter = movieAdapter
 
         })
+    }
 
-
+    private fun setupRecyclerView() {
+        binding.upcomingRecyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+        }
     }
 
     fun Fragment.hideKeyboard() {

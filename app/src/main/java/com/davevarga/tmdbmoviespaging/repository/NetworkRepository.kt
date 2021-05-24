@@ -1,6 +1,5 @@
 package com.davevarga.tmdbmoviespaging.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -11,17 +10,23 @@ import com.davevarga.tmdbmoviespaging.network.*
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Response
 
-class NetworkRepository(private val apiService : GetData) {
+class NetworkRepository(private val apiService: GetData) {
 
-    var readyList: List<Genre>? = null
+    private var readyList: List<Genre>? = null
 
-    lateinit var moviePagedList: LiveData<PagedList<Movie>>
-    lateinit var upcomingPagedList: LiveData<PagedList<Movie>>
-    lateinit var moviesDataSourceFactory: MovieDataSourceFactory
-    lateinit var upcomingDataSourceFactory: UpcomingDataSourceFactory
+    private lateinit var moviePagedList: LiveData<PagedList<Movie>>
+    private lateinit var upcomingPagedList: LiveData<PagedList<Movie>>
+    private lateinit var moviesDataSourceFactory: MovieDataSourceFactory
+    private lateinit var upcomingDataSourceFactory: UpcomingDataSourceFactory
 
-    fun fetchLiveMoviePagedList (compositeDisposable: CompositeDisposable, minYear: String, maxYear: String, genre: String) : LiveData<PagedList<Movie>> {
-        moviesDataSourceFactory = MovieDataSourceFactory(apiService, compositeDisposable, minYear, maxYear, genre)
+    fun fetchLiveMoviePagedList(
+        compositeDisposable: CompositeDisposable,
+        minYear: String,
+        maxYear: String,
+        genre: String
+    ): LiveData<PagedList<Movie>> {
+        moviesDataSourceFactory =
+            MovieDataSourceFactory(apiService, compositeDisposable, minYear, maxYear, genre)
 
         val config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
@@ -50,12 +55,8 @@ class NetworkRepository(private val apiService : GetData) {
         moviesDataSourceFactory.refresh()
     }
 
-//    fun refreshUpcoming() {
-//        upcomingDataSourceFactory.refresh()
-//    }
-
     suspend fun getAllGenres(): List<Genre>? {
-        var genreList: Response<GenreList>
+        val genreList: Response<GenreList>
 
         genreList = ServiceBuilder.getNetworkClient(GetData::class.java)
             .getAllGenres(

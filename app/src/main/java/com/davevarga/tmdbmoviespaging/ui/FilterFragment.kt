@@ -26,7 +26,7 @@ class FilterFragment : Fragment() {
     private lateinit var binding: FragmentFilterBinding
     private var newGenreString: GenreString = GenreString(0, "27")
 
-    lateinit var networkRepository: NetworkRepository
+    private lateinit var networkRepository: NetworkRepository
     private val genreList: List<Genre> = arrayListOf()
     private val viewModelAdapter = GenreAdapter(genreList)
 
@@ -58,19 +58,20 @@ class FilterFragment : Fragment() {
         genreViewModel.getGenreList()
         viewModelAdapter.items = genreViewModel.genreList
 
-        binding.genreRecyclerView.apply {
-            setHasFixedSize(true)
-            layoutManager = GridLayoutManager(context, 3)
-            adapter = viewModelAdapter
-        }
+        setupRecyclerView()
 
         genreViewModel.genreList
 
+        setBindings()
+    }
+
+    private fun setBindings() {
         binding.saveButton.setOnClickListener { view: View ->
 
             newGenreString.genres = filledIdList.joinToString("|")
             Log.i("FILLED", filledIdList.toString())
             val toDisplay = newGenreString.genres
+            filledIdList.clear()
 
             val filterByYearAction = FilterFragmentDirections.actionFilterFragmentToListFragment(
                 minYear = binding.minYearValue.text.toString(),
@@ -78,6 +79,14 @@ class FilterFragment : Fragment() {
                 genres = toDisplay
             )
             view.findNavController().navigate(filterByYearAction)
+        }
+    }
+
+    private fun setupRecyclerView() {
+        binding.genreRecyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = GridLayoutManager(context, 3)
+            adapter = viewModelAdapter
         }
     }
 
