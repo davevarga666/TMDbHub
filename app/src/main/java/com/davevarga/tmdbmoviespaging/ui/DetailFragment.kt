@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -14,14 +15,15 @@ import com.bumptech.glide.Glide
 import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.databinding.FragmentDetailBinding
 import com.davevarga.tmdbmoviespaging.models.Movie
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
 
     private val myCollectionViewModel by lazy {
-        ViewModelProviders.of(
+        ViewModelProvider(
             requireActivity(),
             MyCollectionViewModelFactory(requireActivity().application)
         )

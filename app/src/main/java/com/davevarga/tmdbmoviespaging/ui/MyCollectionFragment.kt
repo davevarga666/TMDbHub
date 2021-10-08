@@ -7,20 +7,22 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.databinding.FragmentMyMoviesBinding
 import com.davevarga.tmdbmoviespaging.models.Movie
-import kotlinx.android.synthetic.main.fragment_my_movies.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyCollectionFragment : Fragment(), MyCollectionClickListener {
 
     private lateinit var binding: FragmentMyMoviesBinding
 
     private val viewModel by lazy {
-        ViewModelProviders.of(
+        ViewModelProvider(
             requireActivity(),
             MyCollectionViewModelFactory(requireActivity().application)
         )
@@ -48,7 +50,7 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
 
         setHasOptionsMenu(true)
 
-        myMovies_recycler_view.apply {
+        binding.myMoviesRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
         }
@@ -59,22 +61,12 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
         viewModel.myMovieList.observe(viewLifecycleOwner, Observer { items ->
             items?.apply {
                 viewModelAdapter.items = items
-                myMovies_recycler_view.adapter = viewModelAdapter
+                binding.myMoviesRecyclerView.adapter = viewModelAdapter
             }
         })
 
     }
 
-    //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-//            R.id.action_up -> {
-//                findNavController().popBackStack()
-//                true
-//            }
-//
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
     override fun onItemClick(item: Movie, position: Int) {
         val action = MyCollectionFragmentDirections.actionMyCollectionFragmentToDetailFragment(item)
         findNavController().navigate(action)

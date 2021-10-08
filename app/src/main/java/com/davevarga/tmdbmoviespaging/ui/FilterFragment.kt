@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,9 +20,9 @@ import com.davevarga.tmdbmoviespaging.models.GenreString
 import com.davevarga.tmdbmoviespaging.network.GetData
 import com.davevarga.tmdbmoviespaging.network.ServiceBuilder
 import com.davevarga.tmdbmoviespaging.repository.NetworkRepository
-import kotlinx.android.synthetic.main.fragment_filter.*
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class FilterFragment : Fragment() {
 
     private lateinit var binding: FragmentFilterBinding
@@ -33,7 +34,7 @@ class FilterFragment : Fragment() {
     private val viewModelAdapter = GenreAdapter(genreList)
 
     private val genreViewModel by lazy {
-        ViewModelProviders.of(
+        ViewModelProvider(
             requireActivity(),
             GenreViewModelFactory(networkRepository, requireActivity().application)
         )
@@ -57,19 +58,16 @@ class FilterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val apiService: GetData = ServiceBuilder.getNetworkClient(GetData::class.java)
-
         networkRepository = NetworkRepository(apiService)
-
-        genreViewModel.getGenreList()
+//        genreViewModel.getGenreList()
         viewModelAdapter.items = genreViewModel.genreList
 
-        genreRecyclerView.apply {
+        binding.genreRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(context, 3)
             adapter = viewModelAdapter
         }
 
-//        genreViewModel.genreList
 
         binding.saveButton.setOnClickListener { view: View ->
 
@@ -78,8 +76,8 @@ class FilterFragment : Fragment() {
             val toDisplay = newGenreString.genres
 
             val filterByYearAction = FilterFragmentDirections.actionFilterFragmentToListFragment(
-                minYear = minYear_value.text.toString(),
-                maxYear = maxYear_value.text.toString(),
+                minYear = binding.minYearValue.text.toString(),
+                maxYear = binding.maxYearValue.text.toString(),
                 genres = toDisplay
             )
             view.findNavController().navigate(filterByYearAction)

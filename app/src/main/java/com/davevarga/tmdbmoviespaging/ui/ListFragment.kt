@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,17 +20,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.davevarga.tmdbmoviespaging.R
+import com.davevarga.tmdbmoviespaging.databinding.FragmentFilterBinding
+import com.davevarga.tmdbmoviespaging.databinding.FragmentListBinding
 import com.davevarga.tmdbmoviespaging.models.GenreString
 import com.davevarga.tmdbmoviespaging.models.Movie
 import com.davevarga.tmdbmoviespaging.network.GetData
 import com.davevarga.tmdbmoviespaging.network.ServiceBuilder
 import com.davevarga.tmdbmoviespaging.repository.NetworkRepository
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_list.*
 
+@AndroidEntryPoint
 class ListFragment : Fragment(), MovieClickListener {
 
     private lateinit var swipeLayout: SwipeRefreshLayout
+    private lateinit var binding: FragmentListBinding
 
     val args: ListFragmentArgs by navArgs()
 
@@ -36,13 +42,21 @@ class ListFragment : Fragment(), MovieClickListener {
     private val compositeDisposable = CompositeDisposable()
 
     private val movieViewModel by lazy {
-        ViewModelProviders.of(
+        ViewModelProvider(
             requireActivity(),
             MovieViewModelFactory(
                 requireActivity().application, networkRepository, args.minYear, args.maxYear, args.genres
             )
         )
             .get(MovieViewModel::class.java)
+    }
+
+    private val genreViewModel by lazy {
+        ViewModelProvider(
+            requireActivity(),
+            GenreViewModelFactory(networkRepository, requireActivity().application)
+        )
+            .get(GenreViewModel::class.java)
     }
 
     private val movieAdapter = MoviePagedlistAdapter(this)
@@ -52,16 +66,21 @@ class ListFragment : Fragment(), MovieClickListener {
         savedInstanceState: Bundle?
     ): View? {
         requireActivity().setTitle("Home")
-        return inflater.inflate(R.layout.fragment_list, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_list, container, false
+        )
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val apiService: GetData = ServiceBuilder.getNetworkClient(GetData::class.java)
-
         Log.i("ARGS", args.genres)
         networkRepository = NetworkRepository(apiService)
+        genreViewModel.getGenreList()
 
         movieViewModel.refresh()
         movieViewModel.moviePagedList = networkRepository.fetchLiveMoviePagedList(compositeDisposable, args.minYear, args.maxYear, args.genres)
@@ -69,7 +88,7 @@ class ListFragment : Fragment(), MovieClickListener {
 
 
 
-        recycler_view.apply {
+        binding.recyclerView.apply {
             setHasFixedSize(true)
             adapter = movieAdapter
             layoutManager =  GridLayoutManager(
@@ -81,16 +100,16 @@ class ListFragment : Fragment(), MovieClickListener {
             // LinearLayoutManager(context)
         }
 
-        swipeLayout = swipeRefresh
+        swipeLayout = binding.swipeRefresh
 
         movieViewModel.moviePagedList.observe(viewLifecycleOwner, Observer {
             movieAdapter.submitList(it)
 
         })
 
-        swipeRefresh.setOnRefreshListener {
+        binding.swipeRefresh.setOnRefreshListener {
             movieViewModel.refresh()
-            swipeRefresh.isRefreshing = false
+            binding.swipeRefresh.isRefreshing = false
         }
 
     }
