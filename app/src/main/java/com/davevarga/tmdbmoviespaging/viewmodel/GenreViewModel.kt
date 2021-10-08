@@ -7,22 +7,15 @@ import com.davevarga.tmdbmoviespaging.models.Genre
 import com.davevarga.tmdbmoviespaging.models.GenreString
 import com.davevarga.tmdbmoviespaging.repository.MovieRepository
 import com.davevarga.tmdbmoviespaging.repository.NetworkRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class GenreViewModel(application: Application, private val networkRepository: NetworkRepository) : AndroidViewModel(application) {
 
     private val movieRepository =  MovieRepository(AppDatabase.getInstance(application).movieDao())
-    var genreList = listOf<Genre>()
-
-    init {
-        getGenreList()
-    }
-
-    fun getGenreList() {
-        viewModelScope.launch {
-            genreList = networkRepository.getAllGenres()!!
-
-        }
+//    var genreList = listOf<Genre>()
+    var genreList = liveData(Dispatchers.IO) {
+        emit(networkRepository.getAllGenres())
     }
 
     fun insert(genres: GenreString) {

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -27,11 +28,8 @@ class FilterFragment : Fragment() {
 
     private lateinit var binding: FragmentFilterBinding
     private var newGenreString: GenreString = GenreString(0, "27")
-
     lateinit var networkRepository: NetworkRepository
-
-    private val genreList: List<Genre> = arrayListOf()
-    private val viewModelAdapter = GenreAdapter(genreList)
+    private val viewModelAdapter = GenreAdapter(emptyList())
 
     private val genreViewModel by lazy {
         ViewModelProvider(
@@ -59,8 +57,12 @@ class FilterFragment : Fragment() {
 
         val apiService: GetData = ServiceBuilder.getNetworkClient(GetData::class.java)
         networkRepository = NetworkRepository(apiService)
-//        genreViewModel.getGenreList()
-        viewModelAdapter.items = genreViewModel.genreList
+        genreViewModel.genreList.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                viewModelAdapter.items = it
+                binding.genreRecyclerView.adapter = viewModelAdapter
+            }
+        })
 
         binding.genreRecyclerView.apply {
             setHasFixedSize(true)
@@ -70,7 +72,6 @@ class FilterFragment : Fragment() {
 
 
         binding.saveButton.setOnClickListener { view: View ->
-
             newGenreString.genres = filledIdList.joinToString("|")
             genreViewModel.insert(newGenreString)
             val toDisplay = newGenreString.genres

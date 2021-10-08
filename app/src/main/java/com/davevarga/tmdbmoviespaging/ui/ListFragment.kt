@@ -51,14 +51,6 @@ class ListFragment : Fragment(), MovieClickListener {
             .get(MovieViewModel::class.java)
     }
 
-    private val genreViewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            GenreViewModelFactory(networkRepository, requireActivity().application)
-        )
-            .get(GenreViewModel::class.java)
-    }
-
     private val movieAdapter = MoviePagedlistAdapter(this)
 
     override fun onCreateView(
@@ -80,13 +72,9 @@ class ListFragment : Fragment(), MovieClickListener {
         val apiService: GetData = ServiceBuilder.getNetworkClient(GetData::class.java)
         Log.i("ARGS", args.genres)
         networkRepository = NetworkRepository(apiService)
-        genreViewModel.getGenreList()
-
         movieViewModel.refresh()
         movieViewModel.moviePagedList = networkRepository.fetchLiveMoviePagedList(compositeDisposable, args.minYear, args.maxYear, args.genres)
         hideKeyboard()
-
-
 
         binding.recyclerView.apply {
             setHasFixedSize(true)
