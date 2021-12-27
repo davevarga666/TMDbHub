@@ -1,7 +1,6 @@
 package com.davevarga.tmdbmoviespaging.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +8,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.davevarga.tmdbmoviespaging.adapter.GenreAdapter
 import com.davevarga.tmdbmoviespaging.adapter.GenreAdapter.Companion.filledIdList
 import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.databinding.FragmentFilterBinding
-import com.davevarga.tmdbmoviespaging.models.Genre
 import com.davevarga.tmdbmoviespaging.models.GenreString
 import com.davevarga.tmdbmoviespaging.network.GetData
 import com.davevarga.tmdbmoviespaging.network.ServiceBuilder
@@ -66,7 +63,7 @@ class FilterFragment : Fragment() {
 
         binding.genreRecyclerView.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(context, 3)
+            layoutManager = GridLayoutManager(context, 2)
             adapter = viewModelAdapter
         }
 

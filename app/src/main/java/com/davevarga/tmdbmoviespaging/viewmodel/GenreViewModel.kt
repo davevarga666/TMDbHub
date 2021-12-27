@@ -3,7 +3,6 @@ package com.davevarga.tmdbmoviespaging.ui
 import android.app.Application
 import androidx.lifecycle.*
 import com.davevarga.tmdbmoviespaging.db.AppDatabase
-import com.davevarga.tmdbmoviespaging.models.Genre
 import com.davevarga.tmdbmoviespaging.models.GenreString
 import com.davevarga.tmdbmoviespaging.repository.MovieRepository
 import com.davevarga.tmdbmoviespaging.repository.NetworkRepository

@@ -11,7 +11,7 @@ class MyCollectionViewModel(application: Application) : AndroidViewModel(applica
 
     private val repository: MovieRepository = MovieRepository(AppDatabase.getInstance(application).movieDao())
 
-    var myMovieList: LiveData<List<Movie>>
+    var myMovieList: LiveData<MutableList<Movie>>
 
     init {
         myMovieList = repository.getCollection()
@@ -22,6 +22,12 @@ class MyCollectionViewModel(application: Application) : AndroidViewModel(applica
             repository.insertMovie(movie)
         }
 
+    }
+
+    fun deleteMovie(movieId: Int) {
+        viewModelScope.launch {
+            repository.deleteMovie(movieId)
+        }
     }
 }
 

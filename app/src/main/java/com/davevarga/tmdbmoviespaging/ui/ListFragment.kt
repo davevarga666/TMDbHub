@@ -16,33 +16,30 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.davevarga.tmdbmoviespaging.R
-import com.davevarga.tmdbmoviespaging.databinding.FragmentFilterBinding
 import com.davevarga.tmdbmoviespaging.databinding.FragmentListBinding
-import com.davevarga.tmdbmoviespaging.models.GenreString
+import com.davevarga.tmdbmoviespaging.db.AppDatabase
 import com.davevarga.tmdbmoviespaging.models.Movie
 import com.davevarga.tmdbmoviespaging.network.GetData
 import com.davevarga.tmdbmoviespaging.network.ServiceBuilder
+import com.davevarga.tmdbmoviespaging.repository.MovieRepository
 import com.davevarga.tmdbmoviespaging.repository.NetworkRepository
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.CompositeDisposable
 
-@AndroidEntryPoint
 class ListFragment : Fragment(), MovieClickListener {
 
     private lateinit var swipeLayout: SwipeRefreshLayout
     private lateinit var binding: FragmentListBinding
-
-    val args: ListFragmentArgs by navArgs()
-
-    lateinit var networkRepository: NetworkRepository
+    private val args: ListFragmentArgs by navArgs()
+    private lateinit var networkRepository: NetworkRepository
     private val compositeDisposable = CompositeDisposable()
+    private val movieAdapter = MoviePagedlistAdapter(this)
 
     private val movieViewModel by lazy {
-        ViewModelProvider(
+        ViewModelProviders.of(
             requireActivity(),
             MovieViewModelFactory(
                 requireActivity().application, networkRepository, args.minYear, args.maxYear, args.genres
@@ -51,18 +48,13 @@ class ListFragment : Fragment(), MovieClickListener {
             .get(MovieViewModel::class.java)
     }
 
-    private val movieAdapter = MoviePagedlistAdapter(this)
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         requireActivity().setTitle("Home")
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_list, container, false
-        )
-
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
         return binding.root
     }
 
@@ -70,36 +62,44 @@ class ListFragment : Fragment(), MovieClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         val apiService: GetData = ServiceBuilder.getNetworkClient(GetData::class.java)
-        Log.i("ARGS", args.genres)
+
         networkRepository = NetworkRepository(apiService)
+
         movieViewModel.refresh()
         movieViewModel.moviePagedList = networkRepository.fetchLiveMoviePagedList(compositeDisposable, args.minYear, args.maxYear, args.genres)
         hideKeyboard()
-
-        binding.recyclerView.apply {
-            setHasFixedSize(true)
-            adapter = movieAdapter
-            layoutManager =  GridLayoutManager(
-                context, // context
-                2, // span count
-                RecyclerView.VERTICAL, // orientation
-                false // reverse layout
-            )
-            // LinearLayoutManager(context)
-        }
-
         swipeLayout = binding.swipeRefresh
+        setupRecyclerView()
+        observe()
+        setBindings()
 
-        movieViewModel.moviePagedList.observe(viewLifecycleOwner, Observer {
-            movieAdapter.submitList(it)
+    }
 
-        })
-
+    private fun setBindings() {
         binding.swipeRefresh.setOnRefreshListener {
             movieViewModel.refresh()
             binding.swipeRefresh.isRefreshing = false
         }
+    }
 
+    private fun observe() {
+        movieViewModel.moviePagedList.observe(viewLifecycleOwner, Observer {
+            movieAdapter.submitList(it)
+
+        })
+    }
+
+    private fun setupRecyclerView() {
+        binding.recyclerView.apply {
+            setHasFixedSize(true)
+            adapter = movieAdapter
+            layoutManager = GridLayoutManager(
+                context,
+                2,
+                RecyclerView.VERTICAL,
+                false
+            )
+        }
     }
 
     fun Fragment.hideKeyboard() {

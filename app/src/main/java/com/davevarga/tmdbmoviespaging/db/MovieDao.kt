@@ -13,7 +13,7 @@ import com.davevarga.tmdbmoviespaging.models.Movie
 @Dao
 interface MovieDao {
     @Query("SELECT * FROM movie_table")
-    fun getCollection(): LiveData<List<Movie>>
+    fun getCollection(): LiveData<MutableList<Movie>>
 
     @Query("SELECT * FROM genre_table")
     fun getGenres(): LiveData<List<GenreString>>
@@ -29,6 +29,9 @@ interface MovieDao {
 
     @Query("DELETE FROM movie_table")
     suspend fun deleteMovies()
+
+    @Query("DELETE FROM movie_table WHERE id = :id ")
+    suspend fun deleteMovie(id: Int)
 
     @Query("DELETE FROM genre_table")
     suspend fun deleteGenres()

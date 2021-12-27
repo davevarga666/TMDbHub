@@ -3,13 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Dave/Dropbox/Projects/TMDbMoviesPaging/app/src/main/res/drawable/bottom_nav_selector.xml" value="0.23796296296296296" />
         <entry key="..\:/Users/Dave/Dropbox/Projects/TMDbMoviesPaging/app/src/main/res/layout/activity_main.xml" value="0.12314814814814815" />
         <entry key="..\:/Users/Dave/Dropbox/Projects/TMDbMoviesPaging/app/src/main/res/layout/fragment_coming_soon.xml" value="0.12314814814814815" />
+        <entry key="..\:/Users/Dave/Dropbox/Projects/TMDbMoviesPaging/app/src/main/res/layout/fragment_filter.xml" value="0.1" />
         <entry key="..\:/Users/Dave/Dropbox/Projects/TMDbMoviesPaging/app/src/main/res/layout/fragment_list.xml" value="0.12314814814814815" />
+        <entry key="..\:/Users/Dave/Dropbox/Projects/TMDbMoviesPaging/app/src/main/res/layout/layout_collection_list_item.xml" value="0.1" />
+        <entry key="..\:/Users/Dave/Dropbox/Projects/TMDbMoviesPaging/app/src/main/res/layout/layout_coming_soon_list_item.xml" value="0.1" />
         <entry key="..\:/Users/Dave/Dropbox/Projects/TMDbMoviesPaging/app/src/main/res/layout/layout_genre_list_item.xml" value="0.11851851851851852" />
+        <entry key="..\:/Users/Dave/Dropbox/Projects/TMDbMoviesPaging/app/src/main/res/menu/my_navigation_items.xml" value="0.1" />
       </map>
     </option>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

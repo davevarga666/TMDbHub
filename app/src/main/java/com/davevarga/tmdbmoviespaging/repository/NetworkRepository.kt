@@ -11,7 +11,7 @@ import com.davevarga.tmdbmoviespaging.network.*
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Response
 
-class NetworkRepository(private val apiService : GetData) {
+class NetworkRepository(private val apiService : GetData){
 
     var readyList: List<Genre>? = null
 

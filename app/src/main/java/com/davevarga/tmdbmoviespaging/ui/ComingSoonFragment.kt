@@ -11,13 +11,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.databinding.FragmentComingSoonBinding
-import com.davevarga.tmdbmoviespaging.databinding.FragmentFilterBinding
 import com.davevarga.tmdbmoviespaging.models.Movie
 import com.davevarga.tmdbmoviespaging.network.GetData
 import com.davevarga.tmdbmoviespaging.network.ServiceBuilder

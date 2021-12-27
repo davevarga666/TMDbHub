@@ -2,35 +2,33 @@ package com.davevarga.tmdbmoviespaging.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.databinding.FragmentDetailBinding
+import com.davevarga.tmdbmoviespaging.db.AppDatabase
 import com.davevarga.tmdbmoviespaging.models.Movie
+import com.davevarga.tmdbmoviespaging.repository.MovieRepository
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
+    private val args: DetailFragmentArgs by navArgs()
 
     private val myCollectionViewModel by lazy {
-        ViewModelProvider(
+        ViewModelProviders.of(
             requireActivity(),
             MyCollectionViewModelFactory(requireActivity().application)
         )
             .get(MyCollectionViewModel::class.java)
     }
-
-    val args: DetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,26 +47,23 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        binding.movie = args.movieDetails
+        setBindings()
+        setBackgroundImage(view)
+    }
 
-        binding.addToCollection.setOnClickListener {
-            myCollectionViewModel.insert(binding.movie as Movie)
-        }
+    private fun setBackgroundImage(view: View) {
         val backgroundPoster = args.movieDetails.backdropPath
         Glide.with(view)
             .load("http://image.tmdb.org/t/p/w500/" + backgroundPoster)
             .into(binding.backgroundPoster)
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-//            R.id.action_up -> {
-//                findNavController().popBackStack()
-//                true
-//            }
-//
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
+    private fun setBindings() {
+        binding.movie = args.movieDetails
+
+        binding.addToCollection.setOnClickListener {
+            myCollectionViewModel.insert(binding.movie as Movie)
+        }
+    }
 
 }

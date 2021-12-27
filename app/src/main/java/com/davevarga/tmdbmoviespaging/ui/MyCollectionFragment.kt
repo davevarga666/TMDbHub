@@ -13,24 +13,24 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.davevarga.tmdbmoviespaging.R
 import com.davevarga.tmdbmoviespaging.databinding.FragmentMyMoviesBinding
+import com.davevarga.tmdbmoviespaging.db.AppDatabase
 import com.davevarga.tmdbmoviespaging.models.Movie
+import com.davevarga.tmdbmoviespaging.repository.MovieRepository
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MyCollectionFragment : Fragment(), MyCollectionClickListener {
 
     private lateinit var binding: FragmentMyMoviesBinding
+    private val movieList: MutableList<Movie> = mutableListOf()
+    private val viewModelAdapter = MyCollectionRecyclerAdapter(movieList, this)
 
     private val viewModel by lazy {
-        ViewModelProvider(
+        ViewModelProviders.of(
             requireActivity(),
             MyCollectionViewModelFactory(requireActivity().application)
         )
             .get(MyCollectionViewModel::class.java)
     }
-
-    private val movieList: List<Movie> = arrayListOf()
-    private val viewModelAdapter = MyCollectionRecyclerAdapter(movieList, this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,11 +50,15 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
 
         setHasOptionsMenu(true)
 
+        setBindings()
+        observeMovieModel()
+    }
+
+    private fun setBindings() {
         binding.myMoviesRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
         }
-        observeMovieModel()
     }
 
     private fun observeMovieModel() {
@@ -68,8 +72,16 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
     }
 
     override fun onItemClick(item: Movie, position: Int) {
+//        removeItem(position)
         val action = MyCollectionFragmentDirections.actionMyCollectionFragmentToDetailFragment(item)
         findNavController().navigate(action)
 
+    }
+
+    override fun onDeleteClick(item: Movie, position: Int) {
+        viewModelAdapter.items.removeAt(position)
+        viewModel.deleteMovie(item.id)
+        binding.myMoviesRecyclerView.recycledViewPool.clear()
+        viewModelAdapter.notifyDataSetChanged()
     }
 }

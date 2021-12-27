@@ -14,6 +14,7 @@ const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500"
 const val POST_PER_PAGE = 20
 const val START_OF_YEAR = "-01-01"
 const val END_OF_YEAR = "-12-31"
+const val FULL_URL = "https://api.themoviedb.org/3/movie/550?api_key=d00127676d268780e41811f616e4fbb0&sort_by=popularity.desc"
 
 object ServiceBuilder {
     private val client = OkHttpClient.Builder().build()

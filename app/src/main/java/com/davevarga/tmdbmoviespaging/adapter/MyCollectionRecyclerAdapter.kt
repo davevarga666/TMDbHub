@@ -13,7 +13,7 @@ import com.davevarga.tmdbmoviespaging.databinding.LayoutCollectionListItemBindin
 import com.davevarga.tmdbmoviespaging.models.Movie
 
 class MyCollectionRecyclerAdapter(
-    var items: List<Movie>,
+    var items: MutableList<Movie>,
     var clickListener: MyCollectionClickListener?
 ) :
     RecyclerView.Adapter<MyCollectionRecyclerAdapter.MyCollectionViewHolder>() {
@@ -74,6 +74,10 @@ class MyCollectionRecyclerAdapter(
                 clickListener.onItemClick(movieItem, adapterPosition)
             }
 
+            binding.remove.setOnClickListener {
+                clickListener.onDeleteClick(movieItem, adapterPosition)
+            }
+
             val circularProgressDrawable = CircularProgressDrawable(itemView.context)
             circularProgressDrawable.strokeWidth = 5f
             circularProgressDrawable.centerRadius = 30f
@@ -98,4 +102,5 @@ class MyCollectionRecyclerAdapter(
 
 interface MyCollectionClickListener {
     fun onItemClick(item: Movie, position: Int)
+    fun onDeleteClick(item: Movie, position: Int)
 }

@@ -7,8 +7,7 @@ import com.davevarga.tmdbmoviespaging.models.Movie
 
 class MovieRepository(private val movieDao: MovieDao) {
 
-
-    fun getCollection(): LiveData<List<Movie>> = movieDao.getCollection()
+    fun getCollection(): LiveData<MutableList<Movie>> = movieDao.getCollection()
 
     suspend fun insertMovie(movie: Movie) {
         movieDao.insertMovie(movie)
@@ -20,6 +19,10 @@ class MovieRepository(private val movieDao: MovieDao) {
 
     suspend fun deleteGenres() {
         movieDao.deleteGenres()
+    }
+
+    suspend fun deleteMovie(id: Int) {
+        movieDao.deleteMovie(id)
     }
 
 }
