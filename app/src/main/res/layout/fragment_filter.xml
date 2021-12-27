@@ -27,7 +27,8 @@
             android:textColor="#ffffff"
             android:textSize="11dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpUsage" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +41,7 @@
                 android:id="@+id/minYear_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_rounded_ractangle_10"
                 android:backgroundTint="@color/colorAccent"
@@ -52,13 +53,14 @@
                 android:textColor="#ffffff"
                 android:textColorHint="#ffffff"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="SpUsage" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/maxYear_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_rounded_ractangle_10"
                 android:backgroundTint="@color/colorAccent"
@@ -70,7 +72,8 @@
                 android:textColor="#ffffff"
                 android:textColorHint="#ffffff"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="SpUsage" />
 
         </LinearLayout>
 
@@ -78,16 +81,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="Filter via genre"
+            android:text="@string/filter_via_genre"
             android:textColor="#ffffff"
             android:textSize="11dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpUsage" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/genreRecyclerView"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="6dp"
             android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
@@ -99,9 +103,10 @@
             android:layout_gravity="bottom"
             android:backgroundTint="@color/colorAccent"
             android:padding="15dp"
-            android:text="Filter"
+            android:text="@string/filter_this"
             android:textSize="14dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="SpUsage" />
 
     </LinearLayout>
 </layout>

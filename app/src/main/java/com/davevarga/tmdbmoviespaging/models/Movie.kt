@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import org.jetbrains.annotations.NotNull
 
 @Parcelize
 @Entity(tableName = "movie_table")
@@ -71,7 +70,8 @@ data class Genre(
     val genreId: String?,
 
     @SerializedName("name")
-    val genreName: String?
+    val genreName: String?,
+
 )
 
 data class ProdCompany(
@@ -105,20 +105,6 @@ data class SpokenLanguage(
 )
 
 data class MovieResponse(
-    val page: Int,
-
-    @SerializedName("total_results")
-    val totalResults: Int,
-
-    @SerializedName("total_pages")
-    val totalPages: Int,
-
-    @SerializedName("results")
-    val movieList: List<Movie>
-)
-
-data class MovieList(
-    @SerializedName("page")
     val page: Int,
 
     @SerializedName("total_results")
