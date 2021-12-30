@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TMDbMoviesPaging</string>
+    <string name="app_name">TMDbHub</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="poster">poster</string>
     <string name="background_image">background image</string>

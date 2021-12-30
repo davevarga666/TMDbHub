@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.davevarga.tmdbmoviespaging.ui.ListFragment"
+        android:name="com.davevarga.tmdbhub.ui.ListFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_list" >
         <action
@@ -37,19 +37,19 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.davevarga.tmdbmoviespaging.ui.DetailFragment"
+        android:name="com.davevarga.tmdbhub.ui.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" >
         <argument
             android:name="movieDetails"
-            app:argType="com.davevarga.tmdbmoviespaging.models.Movie" />
+            app:argType="com.davevarga.tmdbhub.models.Movie" />
         <action
             android:id="@+id/action_detailFragment_to_myCollectionFragment"
             app:destination="@id/myCollectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
-        android:name="com.davevarga.tmdbmoviespaging.ui.FilterFragment"
+        android:name="com.davevarga.tmdbhub.ui.FilterFragment"
         android:label="fragment_filter"
         tools:layout="@layout/fragment_filter" >
         <action
@@ -58,7 +58,7 @@
     </fragment>
     <fragment
         android:id="@+id/myCollectionFragment"
-        android:name="com.davevarga.tmdbmoviespaging.ui.MyCollectionFragment"
+        android:name="com.davevarga.tmdbhub.ui.MyCollectionFragment"
         android:label="MyCollectionFragment" >
         <action
             android:id="@+id/action_myCollectionFragment_to_detailFragment"
@@ -66,7 +66,7 @@
     </fragment>
     <fragment
         android:id="@+id/comingSoonFragment"
-        android:name="com.davevarga.tmdbmoviespaging.ui.ComingSoonFragment"
+        android:name="com.davevarga.tmdbhub.ui.ComingSoonFragment"
         android:label="ComingSoonFragment" >
         <action
             android:id="@+id/action_comingSoonFragment_to_detailFragment"

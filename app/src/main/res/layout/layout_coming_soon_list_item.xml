@@ -7,7 +7,7 @@
 
         <variable
             name="movieItem"
-            type="com.davevarga.tmdbmoviespaging.models.Movie" />
+            type="com.davevarga.tmdbhub.models.Movie" />
 
     </data>
 
