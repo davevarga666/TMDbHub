@@ -1,4 +1,4 @@
-# TMDb Movies
+# TMDb Hub
 Listing movies using the TMDb API. You can filter results, view details, and save them to a collection.
 
 ## Technologies
