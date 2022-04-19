@@ -17,10 +17,6 @@ class MovieRepository(private val movieDao: MovieDao) {
         movieDao.insertGenres(genres)
     }
 
-    suspend fun deleteGenres() {
-        movieDao.deleteGenres()
-    }
-
     suspend fun deleteMovie(id: Int) {
         movieDao.deleteMovie(id)
     }

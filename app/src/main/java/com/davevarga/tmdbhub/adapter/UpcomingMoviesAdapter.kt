@@ -1,4 +1,4 @@
-package com.davevarga.tmdbhub.ui
+package com.davevarga.tmdbhub.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +14,12 @@ import com.davevarga.tmdbhub.BaseApplication.Companion.detailViewOpen
 import com.davevarga.tmdbhub.R
 import com.davevarga.tmdbhub.databinding.LayoutComingSoonListItemBinding
 import com.davevarga.tmdbhub.models.Movie
-import com.davevarga.tmdbhub.network.POSTER_BASE_URL
+import com.davevarga.tmdbhub.util.POSTER_BASE_URL
 
 class UpcomingMoviesAdapter(var clickListener: MovieClickListener) :
     PagedListAdapter<Movie, UpcomingMoviesAdapter.MyViewHolder>(MovieDiffCallback()) {
 
-    lateinit var binding: LayoutComingSoonListItemBinding
+    private lateinit var binding: LayoutComingSoonListItemBinding
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

@@ -7,17 +7,19 @@ import com.davevarga.tmdbhub.models.Genre
 import com.davevarga.tmdbhub.models.GenreList
 import com.davevarga.tmdbhub.models.Movie
 import com.davevarga.tmdbhub.network.*
+import com.davevarga.tmdbhub.util.API_KEY
+import com.davevarga.tmdbhub.util.POST_PER_PAGE
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Response
 
 class NetworkRepository(private val apiService : GetData){
 
-    var readyList: List<Genre>? = null
+    private var readyList: List<Genre>? = null
 
-    lateinit var moviePagedList: LiveData<PagedList<Movie>>
-    lateinit var upcomingPagedList: LiveData<PagedList<Movie>>
-    lateinit var moviesDataSourceFactory: MovieDataSourceFactory
-    lateinit var upcomingDataSourceFactory: UpcomingDataSourceFactory
+    private lateinit var moviePagedList: LiveData<PagedList<Movie>>
+    private lateinit var upcomingPagedList: LiveData<PagedList<Movie>>
+    private lateinit var moviesDataSourceFactory: MovieDataSourceFactory
+    private lateinit var upcomingDataSourceFactory: UpcomingDataSourceFactory
 
     fun fetchLiveMoviePagedList (compositeDisposable: CompositeDisposable, minYear: String, maxYear: String, genre: String) : LiveData<PagedList<Movie>> {
         moviesDataSourceFactory = MovieDataSourceFactory(apiService, compositeDisposable, minYear, maxYear, genre)
@@ -50,10 +52,8 @@ class NetworkRepository(private val apiService : GetData){
     }
 
     suspend fun getAllGenres(): List<Genre>? {
-        val genreList: Response<GenreList>
 
-        genreList = ServiceBuilder.getNetworkClient(GetData::class.java)
-            .getAllGenres(
+        val genreList: Response<GenreList> = apiService.getAllGenres(
                 API_KEY
             )
 

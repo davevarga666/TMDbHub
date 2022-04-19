@@ -11,7 +11,7 @@ import com.davevarga.tmdbhub.models.Genre
 class GenreAdapter(var items: List<Genre>) :
     RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
 
-    lateinit var binding: LayoutGenreListItemBinding
+    private lateinit var binding: LayoutGenreListItemBinding
 
     companion object {
         var filledIdList = mutableSetOf<String>()
@@ -37,7 +37,7 @@ class GenreAdapter(var items: List<Genre>) :
     }
 
     override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
-        return holder.bind(items.get(position), binding)
+        return holder.bind(items[position], binding)
     }
 
 

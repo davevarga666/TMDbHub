@@ -1,4 +1,4 @@
-package com.davevarga.tmdbhub.ui
+package com.davevarga.tmdbhub.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +20,7 @@ class MyCollectionRecyclerAdapter(
     RecyclerView.Adapter<MyCollectionRecyclerAdapter.MyCollectionViewHolder>() {
 
 
-    lateinit var binding: LayoutCollectionListItemBinding
+    private lateinit var binding: LayoutCollectionListItemBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyCollectionViewHolder {
 

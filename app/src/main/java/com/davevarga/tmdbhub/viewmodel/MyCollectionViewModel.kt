@@ -1,15 +1,21 @@
 package com.davevarga.tmdbhub.ui
 
 import android.app.Application
-import androidx.lifecycle.*
-import com.davevarga.tmdbhub.db.AppDatabase
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import com.davevarga.tmdbhub.models.Movie
 import com.davevarga.tmdbhub.repository.MovieRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyCollectionViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class MyCollectionViewModel @Inject constructor(
+    application: Application,
+    private val repository: MovieRepository
+) : AndroidViewModel(application) {
 
-    private val repository: MovieRepository = MovieRepository(AppDatabase.getInstance(application).movieDao())
     var myMovieList: LiveData<MutableList<Movie>>
 
     init {
@@ -27,18 +33,5 @@ class MyCollectionViewModel(application: Application) : AndroidViewModel(applica
         viewModelScope.launch {
             repository.deleteMovie(movieId)
         }
-    }
-}
-
-@Suppress("UNCHECKED_CAST")
-class MyCollectionViewModelFactory(
-    val application: Application
-) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MyCollectionViewModel::class.java)) {
-            return MyCollectionViewModel(application) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

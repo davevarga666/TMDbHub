@@ -23,4 +23,9 @@
     <string name="save_to_collection">+ Watchlist</string>
     <string name="filter_via_genre">Filter via genre</string>
     <string name="filter_this">Filter</string>
+    <string name="home">Home</string>
+    <string name="filterfragment">Filter</string>
+    <string name="details">Details</string>
+    <string name="mymovies">My Movies</string>
+    <string name="comingsoon">Coming Soon</string>
 </resources>

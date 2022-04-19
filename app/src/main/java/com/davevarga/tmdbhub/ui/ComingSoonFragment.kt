@@ -1,83 +1,45 @@
 package com.davevarga.tmdbhub.ui
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.davevarga.tmdbhub.R
+import com.davevarga.tmdbhub.adapter.MovieClickListener
+import com.davevarga.tmdbhub.adapter.UpcomingMoviesAdapter
 import com.davevarga.tmdbhub.databinding.FragmentComingSoonBinding
 import com.davevarga.tmdbhub.models.Movie
-import com.davevarga.tmdbhub.network.GetData
-import com.davevarga.tmdbhub.network.ServiceBuilder
-import com.davevarga.tmdbhub.repository.NetworkRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-class ComingSoonFragment : Fragment(), MovieClickListener {
+@AndroidEntryPoint
+class ComingSoonFragment : BaseFragment<FragmentComingSoonBinding>(), MovieClickListener {
 
-    private lateinit var binding: FragmentComingSoonBinding
-    lateinit var networkRepository: NetworkRepository
-    private val viewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            UpcomingViewModelFactory(
-                networkRepository
-            )
-        )
-            .get(UpcomingViewModel::class.java)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        requireActivity().setTitle("Coming Soon")
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_coming_soon, container, false
-        )
-
-        return binding.root
-    }
+    private val viewModel: UpcomingViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val apiService: GetData = ServiceBuilder.getNetworkClient(GetData::class.java)
-
-        networkRepository = NetworkRepository(apiService)
+        requireActivity().title = getString(R.string.comingsoon)
         val movieAdapter = UpcomingMoviesAdapter(this)
-
         hideKeyboard()
-        binding.upcomingRecyclerView.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-        }
+        setRecyclerview()
+        observe(movieAdapter)
+    }
 
-        viewModel.upcomingPagedList.observe(viewLifecycleOwner, Observer {
+    private fun observe(movieAdapter: UpcomingMoviesAdapter) {
+        viewModel.upcomingPagedList.observe(viewLifecycleOwner, {
             movieAdapter.submitList(it)
             binding.upcomingRecyclerView.adapter = movieAdapter
 
         })
-
-
     }
 
-    fun Fragment.hideKeyboard() {
-        view?.let { activity?.hideKeyboard(it) }
-    }
-
-    fun Context.hideKeyboard(view: View) {
-        val inputMethodManager =
-            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    private fun setRecyclerview() {
+        binding.upcomingRecyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+        }
     }
 
     override fun onItemClick(item: Movie, position: Int) {
@@ -85,4 +47,6 @@ class ComingSoonFragment : Fragment(), MovieClickListener {
         findNavController().navigate(action)
 
     }
+
+    override fun getFragmentView() = R.layout.fragment_coming_soon
 }

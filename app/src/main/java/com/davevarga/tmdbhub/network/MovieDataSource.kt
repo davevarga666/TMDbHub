@@ -4,6 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.davevarga.tmdbhub.models.Movie
 import com.davevarga.tmdbhub.repository.NetworkState
+import com.davevarga.tmdbhub.util.API_KEY
+import com.davevarga.tmdbhub.util.END_OF_YEAR
+import com.davevarga.tmdbhub.util.FIRST_PAGE
+import com.davevarga.tmdbhub.util.START_OF_YEAR
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 

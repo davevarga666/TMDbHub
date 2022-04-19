@@ -1,12 +1,8 @@
 package com.davevarga.tmdbhub.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -14,39 +10,22 @@ import com.davevarga.tmdbhub.BaseApplication.Companion.detailViewOpen
 import com.davevarga.tmdbhub.R
 import com.davevarga.tmdbhub.databinding.FragmentDetailBinding
 import com.davevarga.tmdbhub.models.Movie
+import com.davevarga.tmdbhub.util.BACKGROUND_BASE_URL
+import dagger.hilt.android.AndroidEntryPoint
 
-class DetailFragment : Fragment() {
+@AndroidEntryPoint
+class DetailFragment : BaseFragment<FragmentDetailBinding>() {
 
-    private lateinit var binding: FragmentDetailBinding
     private val args: DetailFragmentArgs by navArgs()
-
-    private val myCollectionViewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            MyCollectionViewModelFactory(requireActivity().application)
-        )
-            .get(MyCollectionViewModel::class.java)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        if (detailViewOpen == true) {
-            findNavController().popBackStack()
-        }
-        detailViewOpen = true
-        requireActivity().setTitle("Details")
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_detail, container, false
-        )
-
-        return binding.root
-    }
+    private val myCollectionViewModel: MyCollectionViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (detailViewOpen) {
+            findNavController().popBackStack()
+        }
+        detailViewOpen = true
+        requireActivity().title = getString(R.string.details)
         setHasOptionsMenu(true)
         setBindings()
         setBackgroundImage(view)
@@ -55,7 +34,7 @@ class DetailFragment : Fragment() {
     private fun setBackgroundImage(view: View) {
         val backgroundPoster = args.movieDetails.backdropPath
         Glide.with(view)
-            .load("http://image.tmdb.org/t/p/w500/" + backgroundPoster)
+            .load(BACKGROUND_BASE_URL + backgroundPoster)
             .into(binding.backgroundPoster)
     }
 
@@ -66,4 +45,5 @@ class DetailFragment : Fragment() {
         }
     }
 
+    override fun getFragmentView() = R.layout.fragment_detail
 }

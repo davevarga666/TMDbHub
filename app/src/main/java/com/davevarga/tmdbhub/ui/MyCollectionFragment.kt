@@ -1,49 +1,28 @@
 package com.davevarga.tmdbhub.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.davevarga.tmdbhub.R
+import com.davevarga.tmdbhub.adapter.MyCollectionClickListener
+import com.davevarga.tmdbhub.adapter.MyCollectionRecyclerAdapter
 import com.davevarga.tmdbhub.databinding.FragmentMyMoviesBinding
 import com.davevarga.tmdbhub.models.Movie
+import dagger.hilt.android.AndroidEntryPoint
 
-class MyCollectionFragment : Fragment(), MyCollectionClickListener {
+@AndroidEntryPoint
+class MyCollectionFragment : BaseFragment<FragmentMyMoviesBinding>(), MyCollectionClickListener {
 
-    private lateinit var binding: FragmentMyMoviesBinding
     private val movieList: MutableList<Movie> = mutableListOf()
     private val viewModelAdapter = MyCollectionRecyclerAdapter(movieList, this)
-
-    private val viewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            MyCollectionViewModelFactory(requireActivity().application)
-        )
-            .get(MyCollectionViewModel::class.java)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        requireActivity().setTitle("My Movies")
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_my_movies, container, false
-        )
-
-        return binding.root
-    }
+    private val viewModel: MyCollectionViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().title = getString(R.string.mymovies)
         setHasOptionsMenu(true)
         setBindings()
         observeMovieModel()
@@ -57,7 +36,7 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
     }
 
     private fun observeMovieModel() {
-        viewModel.myMovieList.observe(viewLifecycleOwner, Observer { items ->
+        viewModel.myMovieList.observe(viewLifecycleOwner, { items ->
             items?.apply {
                 viewModelAdapter.items = items
                 binding.myMoviesRecyclerView.adapter = viewModelAdapter
@@ -78,4 +57,6 @@ class MyCollectionFragment : Fragment(), MyCollectionClickListener {
         binding.myMoviesRecyclerView.recycledViewPool.clear()
         viewModelAdapter.notifyDataSetChanged()
     }
+
+    override fun getFragmentView() = R.layout.fragment_my_movies
 }

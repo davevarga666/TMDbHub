@@ -1,30 +1,36 @@
 package com.davevarga.tmdbhub.ui
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import com.davevarga.tmdbhub.models.Movie
 import com.davevarga.tmdbhub.repository.NetworkRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
 
-class MovieViewModel(
+@HiltViewModel
+class MovieViewModel  @Inject constructor(
     application: Application,
-    private val networkRepository: NetworkRepository,
-    var minYear: String,
-    var maxYear: String,
-    var genres: String
+    private val networkRepository: NetworkRepository
 ) :
     AndroidViewModel(application) {
 
-    private val minimumYear = minYear
-    private val maximumYear = maxYear
-    private val mGenre = genres
     private val compositeDisposable = CompositeDisposable()
+    lateinit var moviePagedList: LiveData<PagedList<Movie>>
 
-    var moviePagedList: LiveData<PagedList<Movie>>
-
-    init {
-        moviePagedList = networkRepository.fetchLiveMoviePagedList(compositeDisposable, minimumYear, maximumYear, mGenre)
+    fun fetchPagedList(
+        compositeDisposable: CompositeDisposable, minimumYear: String,
+        maximumYear: String,
+        mGenre: String
+    ) {
+        moviePagedList = networkRepository.fetchLiveMoviePagedList(
+            compositeDisposable,
+            minimumYear,
+            maximumYear,
+            mGenre
+        )
     }
 
     fun refresh() {
@@ -37,20 +43,4 @@ class MovieViewModel(
         compositeDisposable.dispose()
     }
 
-}
-@Suppress("UNCHECKED_CAST")
-class MovieViewModelFactory(
-    val application: Application,
-    val networkRepository: NetworkRepository,
-    val minYear: String,
-    val maxYear: String,
-    val genres: String
-) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MovieViewModel::class.java)) {
-            return MovieViewModel(application, networkRepository, minYear, maxYear, genres) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
 }
